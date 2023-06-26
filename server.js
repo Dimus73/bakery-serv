@@ -15,5 +15,5 @@ app.use(cors());
 app.use(express.urlencoded({extended:true}));
 app.use(express.json());
 
-app.use( '/api/catalog', catalog_units_router.router );
+app.use( '/api/catalog/units', catalog_units_router.router );
 app.use( '/api/catalog/ingredients',catalog_ingredients_router.router)

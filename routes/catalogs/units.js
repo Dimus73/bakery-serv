@@ -5,7 +5,7 @@ const {
 	_getAllUnits
 } = require( '../../controllers/catalogs/units')
 
-router.get( '/units', _getAllUnits)
+router.get( '/', _getAllUnits)
 
 module.exports = {
 	router
