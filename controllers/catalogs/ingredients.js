@@ -2,6 +2,7 @@
 const {
 	getAllIngredients,
 	addIngredient,
+	updateIngredients,
 } = require ('../../modules/catalogs/ingredients');
 
 const {
@@ -31,12 +32,32 @@ const _addIngredient = (req, res) => {
 	console.log('Request from addIngredient:', req.body);
 	addIngredient( req.body )
 	.then (data => {
-		console.log('Data after update:', data )
+		// console.log('Data after add:', data )
 		_getAllIngredients(req, res)
 	})
+	.catch ( err => {
+		console.log(err);
+		res.status( 404 ).json( {msg:err.message} )
+	})
+
+}
+
+const _updateIngredients = (req, res) => {
+	console.log('Request from updateIngredient:', req.body);
+	updateIngredients( req.body )
+	.then ( data => {
+		console.log('Data after update:', data )
+		_getAllIngredients (req, res)
+	})
+	.catch ( err => {
+		console.log(err);
+		res.status( 404 ).json( {msg:err.message} )
+	})
+
 }
 
 module.exports = {
 	_getAllIngredients,
-	_addIngredient
+	_addIngredient,
+	_updateIngredients,
 } 
