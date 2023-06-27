@@ -43,10 +43,10 @@ const _addIngredient = (req, res) => {
 }
 
 const _updateIngredients = (req, res) => {
-	console.log('Request from updateIngredient:', req.body);
+	// console.log('Request from updateIngredient:', req.body);
 	updateIngredients( req.body )
 	.then ( data => {
-		console.log('Data after update:', data )
+		// console.log('Data after update:', data )
 		_getAllIngredients (req, res)
 	})
 	.catch ( err => {
