@@ -4,6 +4,7 @@ const getAllEquipment = () => {
 	return pool.query ('\
 		SELECT id, equipment, quantity, active\
 		FROM equipment \
+		WHERE active  \
 		ORDER BY equipment \
 	')
 }

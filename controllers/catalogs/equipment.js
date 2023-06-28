@@ -6,6 +6,7 @@ const {
 } = require ('../../modules/catalogs/equipment');
 
 const _getAllEquipment = (req, res) => {
+	console.log('Request from addEquipment:', req.user);
 	getAllEquipment()
 	.then( data => {
 		res.json( data.rows )
@@ -17,7 +18,6 @@ const _getAllEquipment = (req, res) => {
 }
 
 const _addEquipment = (req, res) => {
-	// console.log('Request from addEquipment:', req.body);
 	addEquipment( req.body )
 	.then (data => {
 		_getAllEquipment(req, res)
