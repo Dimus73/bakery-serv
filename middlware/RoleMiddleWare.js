@@ -8,7 +8,7 @@ const RIGHTS = {
 
 const RoleMiddleWare = (rolesAllow) => {
 	return function (req, res, next) {
-		// try {
+		try {
 			// console.log(req.headers, rolesAllow);
 			const token = req.headers.authorization.split(' ')[1]
 			if (!token){
@@ -30,10 +30,10 @@ const RoleMiddleWare = (rolesAllow) => {
 
 			next();
 
-		// } catch (error) {
-		// 	console.log('User not authorized (from catch)');
-		// 	return res.status ( 400 ).json( {msg:'User not authorized (from catch)'} )			
-		// }
+		} catch (error) {
+			console.log('User not authorized (from catch)');
+			return res.status ( 400 ).json( {msg:'User not authorized (from catch)'} )			
+		}
 	}
 }
 

@@ -14,8 +14,8 @@ const {
 
 router.get ( '/', RoleMiddleWare ([RIGHTS.USER]), _getAllEquipment );
 //router.get ( '/', authMiddelware, _getAllEquipment );
-router.post ( '/', _addEquipment );
-router.put ( '/', _updateEquipment );
+router.post ( '/', RoleMiddleWare ([RIGHTS.USER]), _addEquipment );
+router.put ( '/', RoleMiddleWare ([RIGHTS.USER]), _updateEquipment );
 
 module.exports = {
 	router
