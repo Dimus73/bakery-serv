@@ -81,7 +81,12 @@ const _logIn = async (req, res) => {
 		const rolesList = rolesFromBase.map ((value) => value.role_id);
 
 		const token = generateAccessToken (user[0].id, rolesList);
-		return res.json({token})
+		return res.json({
+			token,
+			userId: user[0].id,
+			rolesList,
+			username
+		})
 
 	} catch (error) {
 		console.log(error);
