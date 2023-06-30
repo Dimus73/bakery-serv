@@ -6,6 +6,7 @@ const catalog_units_router       = require( './routes/catalogs/units' );
 const catalog_ingredients_router = require( './routes/catalogs/ingredients') 
 const catalog_equipment_router   = require( './routes/catalogs/equipment') 
 const authentication_router      = require( './routes/auth/authentication') 
+const recipe_router              = require( './routes/recipe/recipe') 
 
 const app = express ();
 dotenv.config ();
@@ -21,5 +22,6 @@ app.use( '/api/catalog/units', catalog_units_router.router );
 app.use( '/api/catalog/ingredients', catalog_ingredients_router.router)
 app.use( '/api/catalog/equipment', catalog_equipment_router.router)
 app.use( '/api/auth', authentication_router.router)
+app.use( '/api/recipe', recipe_router.router)
 
 
