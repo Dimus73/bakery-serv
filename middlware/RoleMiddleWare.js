@@ -9,7 +9,7 @@ const RIGHTS = {
 const RoleMiddleWare = (rolesAllow) => {
 	return function (req, res, next) {
 		try {
-			// console.log(req.headers, rolesAllow);
+			// console.log('From MeddleWare =>', req.headers, rolesAllow);
 			const token = req.headers.authorization.split(' ')[1]
 			if (!token){
 				console.log('User not authorized (from catch)');

@@ -8,10 +8,15 @@ const {
 
 const {
 	_addRecipe,
+	_allRecipe,
+	_recipeDetail
 } = require( '../../controllers/recipe/recipe')
 
 
-router.post( '/', _addRecipe);
+router.post( '/',    RoleMiddleWare([RIGHTS.ADMIN]), _addRecipe);
+router.get ( '/',    RoleMiddleWare([RIGHTS.ADMIN]), _allRecipe);
+// router.get ( '/:id',  _recipeDetail);
+router.get ( '/:id', RoleMiddleWare([RIGHTS.ADMIN]), _recipeDetail);
 
 module.exports = {
 	router
