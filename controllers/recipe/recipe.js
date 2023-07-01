@@ -5,14 +5,17 @@ const {
 	allRecipes,	
 	recipeDetail,
 	recipeIngredients,
-	recipeEquipments
+	recipeEquipments,
+	updateRecipe,
+	deleteIngredient,
+	deleteEquipment,
 } = require ('../../modules/recipe/recipe')
 
 const _addRecipe = (req, res) => {
 	const data= req.body
 	const timeStamp = new Date()
 
-	console.log('Data=>', data)
+	// console.log('Data=>', data)
 
 
 	const recipe =  {
@@ -104,8 +107,65 @@ const _recipeDetail = async (req, res) => {
 	}
 }
 
+// *********************** Updating recipe
+const _recipeUpdate = async (req, res) => {
+	const data= req.body
+	const timeStamp = new Date()
+
+	// console.log('Data=>', data)
+
+	const recipe =  {
+		name : data.name,
+		finish_quantity : data.finish_quantity,
+		unit_id : data.unit_id,
+		semifinished : data.semifinished,
+		description : data.description,
+		img : data.imgURL,
+		creator : data.creator,
+		time_st : timeStamp 
+	}
+
+	console.log('Data=>', data)
+ 
+	try {
+		const update = await updateRecipe (data.id, recipe);
+		const deleteIngred = await deleteIngredient (data.id);
+		const deleteEquip = await deleteEquipment (data.id);
+
+		if (data.ingredients.length >0 ){
+			const ingredients = data.ingredients.map(value => ({
+				ingredient_id : value.ingredient_id,
+				quantity : value.quantity,
+				recipe_id : data.id,
+				creator : data.creator,
+				time_st : timeStamp
+			}))
+			const addIngred = await addRecipeIngredient(ingredients)
+		}
+
+		if (data.equipments.length > 0){
+			const equipments = data.equipments.map ((value) =>({
+				equipment_id : value.equipment_id,
+				quantity : value.quantity,
+				recipe_id : data.id,
+				creator : data.creator,
+				time_st : timeStamp 					
+			}))
+			// console.log('Ingedients =>', ingredients);
+			const addEquip = await addRecipeEquipment(equipments)
+		}
+		res.json(data)
+	} catch (error) {
+		console.log(err);
+		res.status (400).json({msg:err.message})
+	}
+
+
+}
+
  module.exports = {
 	_addRecipe,
 	_allRecipe,
 	_recipeDetail,
+	_recipeUpdate,
  }

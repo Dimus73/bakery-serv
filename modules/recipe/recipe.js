@@ -1,6 +1,7 @@
 const {pool} = require ('../../config/db')
 const {db} = require ('../../config/db')
 
+// **********************  For create new Recipe
 const addRecipe = (recipe) => {
 	return db('recipes')
 	.insert (recipe)
@@ -19,11 +20,14 @@ const addRecipeEquipment = (equipment) => {
 	.returning ('*')
 }
 
+
+// **********************  Get list of All Recipe
 const allRecipes = () => {
 	return db( 'recipes' )
 	.select ('*');
 }
 
+// **********************  FOR get Recipe detail 
 const recipeDetail = (id) => {
 	return db( 'recipes' )
 	.select ('*')
@@ -43,6 +47,26 @@ const recipeEquipments = (id) => {
 	.where ({recipe_id:id})
 }
 
+// ********************** For UPDATING Recipe
+const updateRecipe = (id, recipe) => {
+	return db('recipes')
+	.where ('id',id)
+	.update (recipe)
+}
+
+const deleteIngredient = (id) => {
+	return db('recipe_ingred')
+	.where ('recipe_id', id)
+	.del()
+}
+
+const deleteEquipment = (id) => {
+	return db('recipe_equip')
+	.where ('recipe_id', id)
+	.del()
+}
+
+
 module.exports = {
 	addRecipe,
 	addRecipeIngredient,
@@ -50,6 +74,9 @@ module.exports = {
 	allRecipes,
 	recipeDetail,
 	recipeIngredients,
-	recipeEquipments
+	recipeEquipments,
+	updateRecipe,
+	deleteIngredient,
+	deleteEquipment,
 
 }
