@@ -11,6 +11,9 @@ const {
 	deleteEquipment,
 } = require ('../../modules/recipe/recipe')
 
+
+	// *********************** Crate new recipe
+
 const _addRecipe = (req, res) => {
 	const data= req.body
 	const timeStamp = new Date()
@@ -24,7 +27,8 @@ const _addRecipe = (req, res) => {
 		unit_id : data.unit_id,
 		semifinished : data.semifinished,
 		description : data.description,
-		img : data.imgURL,
+		// img : data.imgURL,
+		img : data.img,
 		creator : data.creator,
 		time_st : timeStamp 
 	}
@@ -35,7 +39,7 @@ const _addRecipe = (req, res) => {
 			// console.log('Recipe=>', dRecipe)
 			if (data.ingredients.length >0 ){
 				const ingredients = data.ingredients.map(value => ({
-					ingredient_id : value.id,
+					ingredient_id : value.ingredient_id,
 					quantity : value.quantity,
 					recipe_id : dRecipe[0].id,
 					creator : data.creator,
@@ -47,7 +51,7 @@ const _addRecipe = (req, res) => {
 
 			if (data.equipments.length > 0){
 				const equipments = data.equipments.map ((value) =>({
-					equipment_id : value.id,
+					equipment_id : value.equipment_id,
 					quantity : value.quantity,
 					recipe_id : dRecipe[0].id,
 					creator : data.creator,
@@ -80,11 +84,12 @@ const _recipeDetail = async (req, res) => {
 	const id = req.params.id;
 
 	try {
-		const recipe = await recipeDetail (id);
-		// console.log('Recipe detail =>', recipe);
+		const recipeRows = await recipeDetail (id);
+		const recipe = recipeRows.rows
+		console.log('Recipe detail =>', recipe);
 
 		const ingredients = await recipeIngredients (id);
-		// console.log('Ingredient detail =>', ingredients);
+		// console.log('Ingredient detail =>', ingredients.rows);
 		
 		const equipments = await recipeEquipments (id);
 		// console.log('Equipment detail =>', equipments);
@@ -94,8 +99,8 @@ const _recipeDetail = async (req, res) => {
 		// fullRecipe[0].equipments = [...equipments];
 		// console.log('Recipe FULL detail =>', fullRecipe);
 
-		recipe[0].ingredients = [...ingredients];
-		recipe[0].equipments = [...equipments];
+		recipe[0].ingredients = [...ingredients.rows];
+		recipe[0].equipments = [...equipments.rows];
 		// console.log('Recipe FULL detail =>', recipe);
 
 		
@@ -120,7 +125,8 @@ const _recipeUpdate = async (req, res) => {
 		unit_id : data.unit_id,
 		semifinished : data.semifinished,
 		description : data.description,
-		img : data.imgURL,
+		// img : data.imgURL,
+		img : data.img,
 		creator : data.creator,
 		time_st : timeStamp 
 	}
@@ -169,3 +175,4 @@ const _recipeUpdate = async (req, res) => {
 	_recipeDetail,
 	_recipeUpdate,
  }
+

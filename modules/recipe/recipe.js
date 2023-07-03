@@ -28,23 +28,51 @@ const allRecipes = () => {
 }
 
 // **********************  FOR get Recipe detail 
-const recipeDetail = (id) => {
-	return db( 'recipes' )
-	.select ('*')
-	.where ({id})
+// const recipeDetail = (id) => {
+// 	return db( 'recipes' )
+// 	.select ('*')
+// 	.where ({id})
+// }
 
+const recipeDetail = (id) =>{
+	return pool.query (`\
+	SELECT recipes.id, name, unit_id, semifinished, description, img, finish_quantity, creator, unit_id, units.unit_short_name as unit_name \
+	FROM recipes \
+	LEFT JOIN units ON recipes.unit_id = units.id
+	WHERE recipes.id = ${id} \
+	`)
 }
+
+// const recipeIngredients = (id) => {
+// 	return db( 'recipe_ingred' )
+// 	.select ('*')
+// 	.where ({recipe_id:id})
+// }
 
 const recipeIngredients = (id) => {
-	return db( 'recipe_ingred' )
-	.select ('*')
-	.where ({recipe_id:id})
+	return pool.query (`\
+	SELECT recipe_ingred.id, ingredient_id, quantity, recipe_id, creator, time_st, units.unit_short_name as unit_name, ingredients.name as ingredients_name \
+	FROM 	recipe_ingred \
+	LEFT JOIN ingredients ON recipe_ingred.ingredient_id = ingredients.id \
+	LEFT JOIN units ON ingredients.unit_id = units.id \
+	WHERE recipe_id=${id} \
+	`)
 }
 
+// const recipeEquipments = (id) => {
+// 	return db( 'recipe_equip' )
+// 	.select ('*')
+// 	.where ({recipe_id:id})
+// }
+
 const recipeEquipments = (id) => {
-	return db( 'recipe_equip' )
-	.select ('*')
-	.where ({recipe_id:id})
+	return pool.query( `\
+	SELECT recipe_equip.id, equipment_id, recipe_equip.quantity, creator, time_st, recipe_id, equipment as equipment_name \
+	FROM recipe_equip \
+	LEFT JOIN equipment on equipment_id = equipment.id \
+	WHERE recipe_id = ${id} \
+	` )
+	
 }
 
 // ********************** For UPDATING Recipe
