@@ -73,7 +73,7 @@ const _addRecipe = (req, res) => {
 
 const _allRecipe = (req, res) => {
 	allRecipes()
-	.then (data => res.json(data.rows))
+	.then (data => res.json(data))
 	.catch (err => {
 		console.log(err);
 		res.status (400).json({msg:err.message})
@@ -118,12 +118,8 @@ const _recipeUpdate = async (req, res) => {
 	const timeStamp = new Date()
 
 	// console.log('Data=>', data)
-	
-	const recipe =  {
-		active_recipe : false,
-	}
 
-	const newRecipe =  {
+	const recipe =  {
 		name : data.name,
 		finish_quantity : data.finish_quantity,
 		unit_id : data.unit_id,
@@ -139,13 +135,14 @@ const _recipeUpdate = async (req, res) => {
  
 	try {
 		const update = await updateRecipe (data.id, recipe);
-		const dRecipe = await addRecipe (newRecipe);
+		const deleteIngred = await deleteIngredient (data.id);
+		const deleteEquip = await deleteEquipment (data.id);
 
 		if (data.ingredients.length >0 ){
 			const ingredients = data.ingredients.map(value => ({
 				ingredient_id : value.ingredient_id,
 				quantity : value.quantity,
-				recipe_id : dRecipe[0].id,
+				recipe_id : data.id,
 				creator : data.creator,
 				time_st : timeStamp
 			}))
@@ -156,7 +153,7 @@ const _recipeUpdate = async (req, res) => {
 			const equipments = data.equipments.map ((value) =>({
 				equipment_id : value.equipment_id,
 				quantity : value.quantity,
-				recipe_id : dRecipe[0].id,
+				recipe_id : data.id,
 				creator : data.creator,
 				time_st : timeStamp 					
 			}))
