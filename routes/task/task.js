@@ -10,16 +10,19 @@ const {
 	_addTask,
 	_updateTask,
 	_getTask,
-} = require( '../../controllers/task/task')
+	_listTasks,
+} = require ( '../../controllers/task/task')
+
+const {
+	_getTaskResource
+} = require ( '../../controllers/task/resource' )
 
 
-router.post ( '/',    RoleMiddleWare([RIGHTS.ADMIN]), _addTask);
-router.put  ( '/',    RoleMiddleWare([RIGHTS.ADMIN]), _updateTask);
-router.get  ( '/:id', RoleMiddleWare([RIGHTS.ADMIN]), _getTask);
-// router.get ( '/',    RoleMiddleWare([RIGHTS.ADMIN]), _allRecipe);
-// // router.get ( '/:id',  _recipeDetail);
-// router.get ( '/:id', RoleMiddleWare([RIGHTS.ADMIN]), _recipeDetail);
-// router.put ( '/',  _recipeUpdate);
+router.post ( '/',                RoleMiddleWare([RIGHTS.ADMIN]), _addTask);
+router.put  ( '/',                RoleMiddleWare([RIGHTS.ADMIN]), _updateTask);
+router.get  ( '/:id',             RoleMiddleWare([RIGHTS.ADMIN]), _getTask);
+router.get  ( '/',                RoleMiddleWare([RIGHTS.ADMIN]), _listTasks);
+router.get  ( '/resource/:id',    RoleMiddleWare([RIGHTS.ADMIN]), _getTaskResource);
 
 module.exports = {
 	router

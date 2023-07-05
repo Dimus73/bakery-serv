@@ -5,6 +5,7 @@ const {
 	getTaskDetail,
 	deleteTaskDetail,
 	updateTask,
+	listTasks,
 
 } = require ('../../modules/task/task');
 
@@ -121,8 +122,19 @@ const _getTask = async (req, res) => {
 	}
 } 
 
+const _listTasks = async (req, res) => {
+	try {
+		const data = await listTasks ();
+		res.json(data);
+	} catch (error) {
+		console.log(error);
+		res.status( 400 ).json ({msg:error.message});				
+	}
+}
+
 module.exports = {
 	_addTask,
 	_updateTask,
-	_getTask
+	_getTask,
+	_listTasks,
 }

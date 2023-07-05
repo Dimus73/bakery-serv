@@ -52,6 +52,13 @@ const deleteTaskDetail = (id) => {
 	.del() 
 }
 
+//************************* Task List
+const listTasks = () => {
+	return db ('tasks')
+	.select ('*')
+	.orderBy ('date');
+}
+
 module.exports = {
 	addTask,
 	addTaskDetail,
@@ -59,6 +66,7 @@ module.exports = {
 	getTaskDetail,
 	deleteTaskDetail,
 	updateTask,
+	listTasks,
 }
 
 
