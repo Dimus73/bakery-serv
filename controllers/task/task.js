@@ -3,12 +3,14 @@ const {
 	addTaskDetail,
 	getTask,
 	getTaskDetail,
+	deleteTaskDetail,
+	updateTask,
 
 } = require ('../../modules/task/task');
 
 const _addTask = async (req, res) => {
 	const data = req.body;
-	console.log('Request for add task:',data);
+	// console.log('Request for add task:',data);
 	const timeStamp = new Date();
 
 	const task = {
@@ -19,8 +21,8 @@ const _addTask = async (req, res) => {
 	const taskDetail=[]
 
 	try {
-		result = await addTask ( task );
-		console.log('Adding data to task', result);
+		const result = await addTask ( task );
+		// console.log('Adding data to task', result);
 		
 		data.taskList.forEach ((value) => {
 			const detail = {
@@ -32,8 +34,8 @@ const _addTask = async (req, res) => {
 				}
 			taskDetail.push( detail )
 		})
-		result_detail = await addTaskDetail (taskDetail);
-		console.log('***************************');
+		const result_detail = await addTaskDetail (taskDetail);
+		// console.log('***************************');
 		const taskFromBase = await _getTask ({params:{id:result[0].id}}, res)
 
 	} catch (error) {
@@ -42,9 +44,50 @@ const _addTask = async (req, res) => {
 	}
 }
 
+const _updateTask = async (req, res) => {
+	const data = req.body;
+	const id = data.id;
+	// console.log('Request for add task:', data, id);
+	const timeStamp = new Date();
+
+	const task = {
+		date : new Date(data.date),
+		creator : data.user_id,
+		time_st : timeStamp,
+	}
+	const taskDetail=[]
+
+	try {
+		const result = await updateTask ( id, task );
+		// console.log('Adding data to task', result);
+
+		const resultDelete = await deleteTaskDetail ( id );
+		
+		data.taskList.forEach (( value ) => {
+			const detail = {
+				task_id : id,
+				recipe_id : value.recipeId,
+				quantity : value.quantity,
+				creator : data.user_id,
+				time_st : timeStamp,
+				}
+			taskDetail.push( detail )
+		})
+		result_detail = await addTaskDetail (taskDetail);
+		// console.log('After adding Task Detail', result_detail);
+		const taskFromBase = await _getTask ({params:{id}}, res)
+
+	} catch (error) {
+		console.log(error);
+		res.status( 400 ).json ({msg:error.message})
+	}
+}
+
+
 const _getTask = async (req, res) => {
 	const id = req.params.id;
 
+	// console.log('Params:', req.params);
 	// res.json({asd:5,jfd:8})
 
 	try {
@@ -80,4 +123,6 @@ const _getTask = async (req, res) => {
 
 module.exports = {
 	_addTask,
+	_updateTask,
+	_getTask
 }

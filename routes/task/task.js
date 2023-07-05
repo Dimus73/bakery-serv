@@ -8,10 +8,14 @@ const {
 
 const {
 	_addTask,
+	_updateTask,
+	_getTask,
 } = require( '../../controllers/task/task')
 
 
-router.post( '/',    RoleMiddleWare([RIGHTS.ADMIN]), _addTask);
+router.post ( '/',    RoleMiddleWare([RIGHTS.ADMIN]), _addTask);
+router.put  ( '/',    RoleMiddleWare([RIGHTS.ADMIN]), _updateTask);
+router.get  ( '/:id', RoleMiddleWare([RIGHTS.ADMIN]), _getTask);
 // router.get ( '/',    RoleMiddleWare([RIGHTS.ADMIN]), _allRecipe);
 // // router.get ( '/:id',  _recipeDetail);
 // router.get ( '/:id', RoleMiddleWare([RIGHTS.ADMIN]), _recipeDetail);

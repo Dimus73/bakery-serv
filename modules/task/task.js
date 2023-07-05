@@ -6,12 +6,13 @@ const { db } = require ('../../config/db')
 const addTask = (task) => {
 	return db('tasks')
 	.insert (task)
-	.returning ('*')
+	.returning ('*');
 }
 
 const addTaskDetail = (detail) => {
 	return db ('task_detail')
 	.insert (detail)
+	.returning ('*');
 }
 
 
@@ -32,14 +33,32 @@ const getTaskDetail = (id) => {
   LEFT JOIN recipes ON task_detail.recipe_id = recipes.id \
   LEFT JOIN units ON recipes.unit_id = units.id \
 	WHERE task_detail.task_id = ${id} \
+	ORDER BY recipes."name"
 	`)
+}
+
+//************************** Update task (need for update)
+const updateTask = (id, task) => {
+	return db('tasks')
+	.where ('id', id)
+	.update (task) 
+	.returning ('*');
+}
+
+//************************** Delete task detail (need for update)
+const deleteTaskDetail = (id) => {
+	return db('task_detail')
+	.where ('task_id', id)
+	.del() 
 }
 
 module.exports = {
 	addTask,
 	addTaskDetail,
 	getTask,
-	getTaskDetail
+	getTaskDetail,
+	deleteTaskDetail,
+	updateTask,
 }
 
 
