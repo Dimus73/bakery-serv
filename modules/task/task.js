@@ -53,10 +53,17 @@ const deleteTaskDetail = (id) => {
 }
 
 //************************* Task List
+// const listTasks = () => {
+// 	return pool.query (`\
+// 	SELECT id, date AT TIME ZONE 'Israel', in_work, is_ready, active, creator, time_st \
+// 	FROM tasks
+// 	ORDER BY date DESC 
+// 	`)
+// }
 const listTasks = () => {
 	return db ('tasks')
 	.select ('*')
-	.orderBy ('date');
+	.orderBy ('date', 'desc');
 }
 
 module.exports = {

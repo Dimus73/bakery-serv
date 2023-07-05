@@ -11,7 +11,7 @@ const {
 
 const _addTask = async (req, res) => {
 	const data = req.body;
-	// console.log('Request for add task:',data);
+	console.log('Request for add task:',data);
 	const timeStamp = new Date();
 
 	const task = {
@@ -125,6 +125,7 @@ const _getTask = async (req, res) => {
 const _listTasks = async (req, res) => {
 	try {
 		const data = await listTasks ();
+		// console.log('Task list:', data);
 		res.json(data);
 	} catch (error) {
 		console.log(error);

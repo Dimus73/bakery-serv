@@ -50,7 +50,7 @@ const getResourceEquipment = (id) => {
 			tasks."id", \
 			tasks."date", \
 			equipment.equipment  as resource, \
-			sum (recipe_equip.quantity * task_detail.quantity/60) AS quantity, \
+			ROUND ( sum ( recipe_equip.quantity * task_detail.quantity/60 )::numeric, 2 ) AS quantity, \
 			'hr' as unit_name  \
 			FROM \
 				tasks \
