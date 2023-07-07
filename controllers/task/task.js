@@ -11,7 +11,7 @@ const {
 
 const _addTask = async (req, res) => {
 	const data = req.body;
-	console.log('Request for add task:',data);
+	// console.log('Request for add task:',data);
 	const timeStamp = new Date();
 
 	const task = {
