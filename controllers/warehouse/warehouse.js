@@ -4,7 +4,9 @@ const {
 	allDocuments,
 	getDocumentDetail,
 	getDocDataDetail,
+	updateDocument,
 	deleteDocumentDetail,
+	getAllIngredientsWithQuantityAndCost,
 
 } = require('../../modules/warehouse/warehouse');
 
@@ -94,9 +96,19 @@ const _getDocumentDetail = async (req, res) => {
 const _updateDocument = async (req, res) => {
 	const data = req.body;
 	const id = data.id;
+	const timeStamp = new Date();
+
+	const document = {
+		date : data.date,
+		type : data.type,
+		status : data.status,
+		creator : data.userId,
+		time_st : timeStamp,
+	}
 
 	console.log('Data in update document', data);
 	try {
+		await updateDocument (id, document);
 		await deleteDocumentDetail(id);
 		const docDetail = data.docDetail.map ( value => ({
 				warehouse_id : id,
@@ -119,6 +131,19 @@ const _updateDocument = async (req, res) => {
 
 }
 
+//************************** Get warehouse ingredient with quantity and cost
+const _getAllIngredientsWithQuantityAndCost = async (req ,res) => {
+	try {
+		const data = await getAllIngredientsWithQuantityAndCost ();
+		res.json (data);
+
+	} catch (error) {
+
+		console.log(error);
+		res.status( 400 ).json ({msg:error.message})
+	}
+
+}
 
 
 module.exports = {
@@ -126,4 +151,5 @@ module.exports = {
 	_allDocuments,
 	_getDocumentDetail,
 	_updateDocument,
+	_getAllIngredientsWithQuantityAndCost
 }

@@ -41,10 +41,12 @@ const getDocDataDetail = (id) => {
 }
 
 //************************** For update documents detail
-// const updateDocument = (document) => {
-// 	return db ('warehouse')
-// 	.where ({id})
-// }
+const updateDocument = (id, document) => {
+	return db ('warehouse')
+	.where ({id})
+	.update (document)
+	.returning ('*');
+}
 
 const deleteDocumentDetail = (id) => {
 	return db ('warehouse_detail')
@@ -53,6 +55,13 @@ const deleteDocumentDetail = (id) => {
 
 }
 
+//************************** Get warehouse ingredient with quantity and cost
+const getAllIngredientsWithQuantityAndCost = () => {
+	return db ('leftovers_in_stock')
+	select ('*')
+}
+
+
 
 module.exports = {
 	addDocument,
@@ -60,6 +69,8 @@ module.exports = {
 	allDocuments,
 	getDocumentDetail,
 	getDocDataDetail,
+	updateDocument,
 	deleteDocumentDetail,
+	getAllIngredientsWithQuantityAndCost,
 
 }
