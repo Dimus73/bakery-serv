@@ -61,6 +61,7 @@ const _addRecipe = (req, res) => {
 				addRecipeEquipment(equipments)
 				.then (ingEquip => console.log('Equipment =>', ingEquip));
 			}
+			res.json ({msg:'Save-Ok'})
 		}
 	)
 	.catch (err => {
