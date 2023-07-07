@@ -1,4 +1,4 @@
-PORT=3040
+
 DB_HOST=dumbo.db.elephantsql.com
 DB_PORT=5432
 DB_USER=zmiyqgbk

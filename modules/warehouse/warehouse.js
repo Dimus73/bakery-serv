@@ -35,7 +35,8 @@ const getDocumentDetail = (id) => {
 }
 
 const getDocDataDetail = (id) => {
-	return db ('warehouse_detail')
+	// return db ('warehouse_detail')
+	return db ('warehouse_detail_views')
 	.select ('*')
 	.where ('warehouse_id', id)
 }

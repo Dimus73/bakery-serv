@@ -83,7 +83,10 @@ const _getDocumentDetail = async (req, res) => {
 			ingredientId : value.ingredient_id,
 			cost         : value.cost,
 			quantity     : value.quantity,
-			totalCost    : value.cost * value.quantity
+			stock        : value.stock,
+			stockCost    : Number(value.costt.toFixed(2)),
+			unit_name    : value.unit_name,
+			totalCost    : (value.costt * value.quantity).toFixed(2)
 		}));
 		res.json(docData[0]);
 	} catch (error) {
