@@ -9,6 +9,7 @@ const getResourceIngredient = (id) => {
 		tasks."date", \ 
 		ingredients.id as ingredient_id, \
 		ingredients."name"  as resource, \
+		leftovers_in_stock.qountity as quantity_on_stock , \
 		sum (recipe_ingred.quantity * task_detail.quantity) AS quantity, \
 		units.unit_name \
 	FROM \
@@ -33,6 +34,10 @@ const getResourceIngredient = (id) => {
 			units \
 		ON \
 			ingredients.unit_id = units."id" \
+		LEFT JOIN \
+			leftovers_in_stock \
+		ON \
+			ingredients.id = leftovers_in_stock.id	\	 
 	WHERE \
 		tasks."id" = ${id} \
 	GROUP BY \
@@ -40,7 +45,8 @@ const getResourceIngredient = (id) => {
 		tasks."date", \  
 		ingredients.id, \
 		ingredients."name", \
-		units.unit_name \
+		units.unit_name, \
+		leftovers_in_stock.qountity \
 	ORDER BY \
 		tasks."id" ASC	\
 	`)
