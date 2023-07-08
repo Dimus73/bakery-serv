@@ -7,6 +7,7 @@ const getResourceIngredient = (id) => {
 		SELECT \
 		tasks."id", \
 		tasks."date", \ 
+		ingredients.id as ingredient_id, \
 		ingredients."name"  as resource, \
 		sum (recipe_ingred.quantity * task_detail.quantity) AS quantity, \
 		units.unit_name \
@@ -37,6 +38,7 @@ const getResourceIngredient = (id) => {
 	GROUP BY \
 		tasks."id", \
 		tasks."date", \  
+		ingredients.id, \
 		ingredients."name", \
 		units.unit_name \
 	ORDER BY \

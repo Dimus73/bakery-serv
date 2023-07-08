@@ -33,7 +33,8 @@ const allRecipes = () => {
 	SELECT recipes.id, name, unit_id, semifinished, description, img, finish_quantity, creator, unit_id, units.unit_short_name as unit_name \
 	FROM recipes \
 	LEFT JOIN units ON recipes.unit_id = units.id \
-	WHERE active_recipe\
+	WHERE active_recipe \
+	ORDER BY name \
 	`)
 }
 

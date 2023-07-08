@@ -26,7 +26,7 @@ const _getAllUsers = (req, res) => {
 const _addUser =(req, res) => { 
 	const v_error = validationResult (req);
 	if (!v_error.isEmpty()){
-		return res.status(400).json({msj:'Error during registration. (login cannot be empty, password must be from 4 to 12 characters)' ,v_error})
+		return res.status(400).json({msg:'Error during registration. (login cannot be empty, password must be from 4 to 12 characters)' ,v_error})
 	}
 	const {username, password} = req.body
 	getAllUsers ()
