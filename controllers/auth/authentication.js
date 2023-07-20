@@ -1,8 +1,9 @@
 const bcrypt = require('bcryptjs');
-
 const {generateAccessToken} = require( '../../utils/generateAccessToken');
-
 const {validationResult} = require ( 'express-validator' );
+const UserService = require ('../../service/user-service');
+const ApiError = require ('../../exeptions/api-error');
+
 
 const {
 	getAllUsers,
@@ -22,75 +23,36 @@ const _getAllUsers = (req, res) => {
 		res.status( 404 ).json( {msg:err.message} )
 	})
 }
-
-const _addUser =(req, res) => { 
-	const v_error = validationResult (req);
-	if (!v_error.isEmpty()){
-		return res.status(400).json({msg:'Error during registration. (login cannot be empty, password must be from 4 to 12 characters)' ,v_error})
-	}
-	const {username, password} = req.body
-	getAllUsers ()
-	.then (data => {
-		// console.log(data);
-		const candidate = data.rows.filter ((value) => value.username === username)
-		if (candidate.length !== 0) {
-			console.log("User name not unique!");
-			res.status( 404 ).json( {msg:'User name not unique!'} )
-		} 
-		else{
-			const hashPassword = bcrypt.hashSync(password, 10);
-			addUser (username, hashPassword)
-			.then (data => {
-				console.log('New user data=>', data);
-				addUserRole (data[0].id, 1)
-				.then (data_role => res.status(200).json({ msg:'User added successful.' })) 
-				.catch ( err => {
-					console.log(err);
-					res.status(404).json( { msg:err.message })
-				} )
-			})
-			.catch ( err => {
-				console.log(err);
-				res.status(404).json( { msg:err.message })
-			} )
+ 
+const _addUser = async (req, res, next) => { 
+	try {
+		const validationError = validationResult (req);
+		if (!validationError.isEmpty()) {
+			return next(ApiError.BadRequest("The username or password does not match the conditions.", validationError.array()))
 		}
-	})
-	.catch ( err => {
-		console.log(err);
-		res.status( 404 ).json( {msg:err.message} )
-	})
-
+		const {username, password} = req.body
+		const userData = await UserService.registration (username, password);
+		res.cookie ('refreshToken', userData.refreshToken, { maxAge:1*24*60*60*1000, httpOnly:true });
+		res.json(userData);
+	} catch (error) { 
+		console.log('Error From _addUser=>', error);
+		next(error);
+	}
 }
 
-const _logIn = async (req, res) => {
+const _logIn = async (req, res, next) => {
 	try {
+
 		const {username, password} = req.body
-		const user = await getUserByUserName (username);
-
-		if (user.length === 0) {
-			console.log(`User with name --${username}-- is not found`);
-			return res.status( 400 ).json ( {msg:`User with name --${username}-- is not found`} );
-		}
-		
-		const isValidPassword = bcrypt.compareSync (password, user[0].password);
-		if (!isValidPassword) {
-			console.log(`Invalid user password`);
-			return res.status( 400 ).json ( {msg:`Invalid user password`} );
-		}
-		const rolesFromBase = await getUserRoles (user[0].id);
-		const rolesList = rolesFromBase.map ((value) => value.role_id);
-
-		const token = generateAccessToken (user[0].id, rolesList);
-		return res.json({
-			token,
-			userId: user[0].id,
-			rolesList,
-			username
-		})
-
+		const userData = await UserService.login (username, password);
+		res.cookie ('refreshToken', userData.refreshToken, { maxAge:1*24*60*60*1000, httpOnly:true });
+		res.json(userData);
+	
 	} catch (error) {
-		console.log(error);
-		return res.status( 400 ).json({msg:"Login error"}) 
+	
+		console.log('Error From _logIn=>', error);
+		next(error);
+
 	}
 }
 

@@ -8,25 +8,17 @@ const getAllUsers = () => {
 	' )
 }
 
-// const addUser = (username, password) => {
-// 	return pool.query (`\
-// 	INSERT INTO users (username, password)\
-// 	VALUES ('${username}', '${password}')\
-// 	`)
-// }
-
 const addUser = (username, password) => {
 	return db('users')
 	.insert({username, password})
 	.returning ('*')
 }
 
-const getUserByUserName = (username) => {
+const getUserByUserName = async (username) => {
 	return db('users')
 	.select ('id', 'username', 'password')
 	.where ({username})
 }
-
 
 const addUserRole = (user_id, role_id=1) => {
 	return pool.query (`\
@@ -35,12 +27,28 @@ const addUserRole = (user_id, role_id=1) => {
 	`)
 }
 
-const getUserRoles = (user_id) =>{
+const getUserRoles = async (user_id) =>{
 	return db('user_role')
 	.select('role_id')
 	.where({user_id})
 }
 
+const updateOrCreateRefreshToken = async (id, refreshToken) => {
+	const data = await db ('token_scheme')
+	.select( '*' )
+	.where ( {user_id:id} )
+	console.log('updateOrCreateRefreshToken=>', data);
+	
+	if ( data.length === 0 ) {
+		return await db ('token_scheme')
+		.insert ( {user_id:id, refresh_token:refreshToken} ) 
+	} 
+	
+	return await db ('token_scheme')
+	.where ({user_id:id})
+	.update ( {user_id:id, refresh_token:refreshToken} )
+	
+}
 
 module.exports = {
 	getAllUsers,
@@ -48,4 +56,5 @@ module.exports = {
 	addUserRole,
 	getUserByUserName,
 	getUserRoles,
+	updateOrCreateRefreshToken,
 }
