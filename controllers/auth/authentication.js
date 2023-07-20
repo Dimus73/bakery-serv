@@ -13,7 +13,8 @@ const {
 	getUserRoles,
 } = require ('../../modules/auth/authentication')
 
-const {secret_key} = require ('../../config/secret')
+const {secret_key} = require ('../../config/secret');
+const userService = require('../../service/user-service');
 
 const _getAllUsers = (req, res) => {
 	getAllUsers()
@@ -56,8 +57,41 @@ const _logIn = async (req, res, next) => {
 	}
 }
 
+const _logOut = async (req, res, next) => {
+	try {
+		
+		const {refreshToken} = req.cookies;
+		const token = await userService.logout(refreshToken);
+		res.clearCookie('refreshToken');
+		res.json(token);
+
+	} catch (error) {
+
+		console.log('Error From _logIn=>', error);
+		next(error);
+
+	}
+} 
+
+const _refreshToken = async (res, req, next) {
+	try {
+
+		const {refreshToken} = req.cookies;
+		const userData = await UserService.refresh (refreshToken);
+		res.cookie ('refreshToken', userData.refreshToken, { maxAge:1*24*60*60*1000, httpOnly:true });
+		res.json(userData);
+
+	} catch (error) {
+
+		console.log('Error From _logIn=>', error);
+		next(error);
+		
+	}
+}
+
 module.exports = {
 	_getAllUsers,
 	_addUser,
 	_logIn,
+	_logOut,
 }

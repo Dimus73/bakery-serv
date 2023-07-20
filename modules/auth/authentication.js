@@ -50,6 +50,13 @@ const updateOrCreateRefreshToken = async (id, refreshToken) => {
 	
 }
 
+const deleteRefreshToken = async (id) => {
+	return await db ('token_scheme')
+	.where ({user_id:id})
+	.del()
+	.returning('*');
+}
+
 module.exports = {
 	getAllUsers,
 	addUser,
@@ -57,4 +64,5 @@ module.exports = {
 	getUserByUserName,
 	getUserRoles,
 	updateOrCreateRefreshToken,
+	deleteRefreshToken,
 }

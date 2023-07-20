@@ -1,5 +1,8 @@
 const jwt = require ('jsonwebtoken');
-const {updateOrCreateRefreshToken} = require ('../modules/auth/authentication');
+const {
+	updateOrCreateRefreshToken,
+	deleteRefreshToken,
+} = require ('../modules/auth/authentication');
 
 class TokenService {
 	generateTokens(payload) {
@@ -11,6 +14,17 @@ class TokenService {
 	async saveRefreshToken (id, token) {
 		const data = updateOrCreateRefreshToken (id, token);
 	} 
+
+	async deleteToken (token) {
+
+		const tokenData = jwt.verify(token, process.env.JWT_REFRESH_SECRET_KEY);
+		// console.log('Token data =>', tokenData);
+		const data = deleteRefreshToken (tokenData.id);
+		return data;
+		
+	}
+
+
 }
 
 module.exports = new TokenService ();
