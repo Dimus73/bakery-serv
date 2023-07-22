@@ -13,6 +13,7 @@ const {
 	_addUser,
 	_logIn,
 	_logOut,
+	_refreshToken,
 } = require ('../../controllers/auth/authentication');
 
 router.get ( '/', _getAllUsers );
@@ -27,7 +28,7 @@ body('password').trim().isLength( {min:4, max:12}),
 // ], _addUser) ;
 router.post ('/login', _logIn);
 router.post ('/logout', _logOut);
-router.get  ('/refresh',)
+router.get  ('/refresh', _refreshToken)
 
 module.exports = {
 	router

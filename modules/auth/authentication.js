@@ -37,7 +37,7 @@ const updateOrCreateRefreshToken = async (id, refreshToken) => {
 	const data = await db ('token_scheme')
 	.select( '*' )
 	.where ( {user_id:id} )
-	console.log('updateOrCreateRefreshToken=>', data);
+	// console.log('updateOrCreateRefreshToken=>', data);
 	
 	if ( data.length === 0 ) {
 		return await db ('token_scheme')
@@ -57,6 +57,13 @@ const deleteRefreshToken = async (id) => {
 	.returning('*');
 }
 
+const foundRefreshToken = async (token) => {
+	// console.log('------ foundRefreshToken', token);
+	return await db ('token_scheme')
+	.select ('*')
+	.where ({refresh_token:token})
+}
+
 module.exports = {
 	getAllUsers,
 	addUser,
@@ -65,4 +72,5 @@ module.exports = {
 	getUserRoles,
 	updateOrCreateRefreshToken,
 	deleteRefreshToken,
+	foundRefreshToken,
 }

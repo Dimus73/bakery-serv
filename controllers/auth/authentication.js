@@ -73,9 +73,9 @@ const _logOut = async (req, res, next) => {
 	}
 } 
 
-const _refreshToken = async (res, req, next) {
+const _refreshToken = async (req, res, next) => {
 	try {
-
+		// console.log('Cookies=>', req.cookies);
 		const {refreshToken} = req.cookies;
 		const userData = await UserService.refresh (refreshToken);
 		res.cookie ('refreshToken', userData.refreshToken, { maxAge:1*24*60*60*1000, httpOnly:true });
@@ -83,7 +83,7 @@ const _refreshToken = async (res, req, next) {
 
 	} catch (error) {
 
-		console.log('Error From _logIn=>', error);
+		console.log('Error From _refreshToken=>', error);
 		next(error);
 		
 	}
@@ -94,4 +94,5 @@ module.exports = {
 	_addUser,
 	_logIn,
 	_logOut,
+	_refreshToken,
 }
